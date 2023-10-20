@@ -2,6 +2,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import express from 'express'
 import mysql from 'mysql2'
+import { baseResp, errorResp } from './baseResp.js'
 import { dbConfig } from './db.js'
 
 dotenv.config()
@@ -16,10 +17,10 @@ const test = (req, callback) => {
     'SELECT * FROM users',
     (err, result) => {
       if (err) {
-        callback(err)
+        callback(err, errorResp(err))
       } else {
         const row = result
-        callback(null, result)
+        callback(null, baseResp(200, 'Get User Success', result))
       }
       db.end()
     }
@@ -27,10 +28,7 @@ const test = (req, callback) => {
 }
 
 app.get('/', (req, res) => {
-    test(req, (err, resp) => {
-      if (err) return res.status(500).json(err)
-      else return res.status(200).json(resp)
-    })
+  test(req, (err, resp) => { return res.status(resp.error_schema.error_code).json(resp) })
 })
 
 app.listen(port, () => {
