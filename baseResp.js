@@ -1,19 +1,27 @@
 export const baseResp = (errorCode, errorMessage, result) => {
-    return {
-        error_schema: {
-            error_code: errorCode,
-            error_message: errorMessage
-        },
-        output_schema: result
+    if (result) {
+        return {
+            error_schema: {
+                error_code: errorCode,
+                error_message: errorMessage
+            },
+            output_schema: result
+        }
+    } else {
+        return {
+            error_schema: {
+                error_code: errorCode,
+                error_message: errorMessage
+            }
+        }
     }
 }
 
-export const errorResp = (result) => {
+export const errorResp = (message) => {
     return {
         error_schema: {
             error_code: 500,
-            error_message: 'Internal Server Error'
-        },
-        output_schema: result
+            error_message: message
+        }
     }
 }
