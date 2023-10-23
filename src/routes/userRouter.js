@@ -16,3 +16,9 @@ userRouter.get('/all', authenticateJwt, async (req, res) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
+
+userRouter.post('/create-retail', multer().none(), async (req, res) => {
+    userModel.createRetail(req, (err, resp) => {
+        return res.status(resp.error_schema.error_code).json(resp)
+    })
+})
