@@ -16,3 +16,9 @@ inventoryRouter.post('/update', multer().none(), authenticateJwt(['admin'], ['id
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
+
+inventoryRouter.post('/delete', multer().none(), authenticateJwt(['admin'], ['id']), async (req, res) => {
+    inventoryModel.remove(req, (err, resp) => {
+        return res.status(resp.error_schema.error_code).json(resp)
+    })
+})

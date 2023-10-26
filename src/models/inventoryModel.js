@@ -71,3 +71,38 @@ export const update = (req, callback) => {
         }
     )
 }
+
+export const remove = (req, callback) => {
+    const body = req.body
+    const db = mysql.createConnection(dbConfig)
+    db.query(
+        'SELECT * FROM inventorys WHERE id = ?',
+        [body.id],
+        (err, result) => {
+            if (err) {
+                callback(err, errorResp(err.message))
+            } else if (result.length == 0) {
+                callback(null, baseResp(404, 'Item id not found'))
+            } else {
+                const db2 = mysql.createConnection(dbConfig)
+                db2.query(
+                    'DELETE FROM inventorys WHERE id = ?',
+                    [body.id],
+                    (err2) => {
+                        if (err2) {
+                            callback(err2, errorResp(err2.message))
+                        } else {
+                            callback(null, baseResp(200, 'Delete inventory success', {
+                                item_name: result[0].item_name,
+                                description: result[0].description,
+                                unit: result[0].unit
+                            }))
+                        }
+                        db2.end()
+                    }
+                )
+            }
+            db.end()
+        }
+    )
+}
