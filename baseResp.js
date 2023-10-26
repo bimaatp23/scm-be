@@ -25,3 +25,10 @@ export const errorResp = (message) => {
         }
     }
 }
+
+export const unauthorizedResp = {
+    error_schema: {
+        error_code: 401,
+        error_message: 'Unauthorized'
+    }
+}

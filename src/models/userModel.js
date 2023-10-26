@@ -8,10 +8,7 @@ export const login = (req, callback) => {
     const db = mysql.createConnection(dbConfig)
     db.query(
         'SELECT * FROM users WHERE username = ? AND password = ?',
-        [
-            body.username,
-            body.password
-        ],
+        [body.username, body.password],
         (err, result) => {
             if (err) {
                 callback(err, errorResp(err.message))
