@@ -1,25 +1,31 @@
 import jwt from 'jsonwebtoken'
-import { baseResp, unauthorizedResp } from '../../baseResp.js'
+import { badRequestResp, baseResp, invalidTokenResp, unauthorizedResp } from '../../baseResp.js'
 
-export const authenticateJwt = (req, res, next) => {
+export const authenticateJwt = (allowedRole = [], allowedReq = []) => (req, res, next) => {
   const token = req.header('Authorization')?.split(' ')[1]
   let resp
   if (!token) {
-    resp = unauthorizedResp()
-    return res.status(resp.error_schema.error_code).json(resp)
+    return res.status(unauthorizedResp.error_schema.error_code).json(unauthorizedResp)
   }
 
   jwt.verify(token, process.env.SECRET_KEY, (err, payload) => {
     if (err) {
       resp = baseResp(402, 'Invalid token')
-      return res.status(resp.error_schema.error_code).json(resp)
+      return res.status(invalidTokenResp.error_schema.error_code).json(invalidTokenResp)
+    } else if (!(allowedRole.some(role => role == payload.role))) {
+      return res.status(unauthorizedResp.error_schema.error_code).json(unauthorizedResp)
+    } else if (allowedReq.length > 0) {
+      let undefinedCount = 0
+      allowedReq.map(element => {
+        if (req.body[element] == undefined) {
+          undefinedCount = undefinedCount + 1
+        }
+      })
+      if (undefinedCount > 0) {
+        return res.status(badRequestResp.error_schema.error_code).json(badRequestResp)
+      }
     }
     req.payload = payload
     next()
   })
-}
-
-export const authenticateRole = (req, allowedRole = []) => {
-  const currentRole = req.payload.role
-  return allowedRole.some(role => role == currentRole)
 }
