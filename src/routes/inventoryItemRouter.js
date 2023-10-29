@@ -5,8 +5,14 @@ import { authenticateJwt } from './authMiddleware.js'
 
 export const inventoryItemRouter = express.Router()
 
-inventoryItemRouter.post('/create', multer().none(), authenticateJwt(['admin'], ['inventory_id', 'quantity', 'status']), async (req, res) => {
+inventoryItemRouter.post('/create', multer().none(), authenticateJwt(['gudang'], ['inventory_id', 'quantity', 'status']), async (req, res) => {
     inventoryItemModel.create(req, (err, resp) => {
+        return res.status(resp.error_schema.error_code).json(resp)
+    })
+})
+
+inventoryItemRouter.get('/stock', authenticateJwt(['gudang']), async (req, res) => {
+    inventoryItemModel.stock(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
