@@ -16,8 +16,8 @@ export const create = (req, callback) => {
             } else {
                 const db2 = mysql.createConnection(dbConfig)
                 db2.query(
-                    'INSERT INTO inventorys VALUES (NULL, ?, ?, ?)',
-                    [body.item_name, body.description, body.unit],
+                    'INSERT INTO inventorys VALUES (NULL, ?, ?, ?, ?)',
+                    [body.item_name, body.description, body.unit, body.price],
                     (err2) => {
                         if (err2) {
                             callback(err2, errorResp(err2.message))
@@ -25,7 +25,8 @@ export const create = (req, callback) => {
                             callback(null, baseResp(200, 'Create inventory success', {
                                 item_name: body.item_name,
                                 description: body.description,
-                                unit: body.unit
+                                unit: body.unit,
+                                price: body.price
                             }))
                         }
                         db2.end()
@@ -51,8 +52,8 @@ export const update = (req, callback) => {
             } else {
                 const db2 = mysql.createConnection(dbConfig)
                 db2.query(
-                    'UPDATE inventorys set item_name = ?, description = ?, unit = ? WHERE id = ?',
-                    [body.item_name, body.description, body.unit, body.id],
+                    'UPDATE inventorys set item_name = ?, description = ?, unit = ?, price = ? WHERE id = ?',
+                    [body.item_name, body.description, body.unit, body.price, body.id],
                     (err2) => {
                         if (err2) {
                             callback(err2, errorResp(err2.message))
@@ -60,7 +61,8 @@ export const update = (req, callback) => {
                             callback(null, baseResp(200, 'Update inventory success', {
                                 item_name: body.item_name,
                                 description: body.description,
-                                unit: body.unit
+                                unit: body.unit,
+                                price: body.price
                             }))
                         }
                         db2.end()
