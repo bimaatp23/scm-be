@@ -11,8 +11,8 @@ userRouter.post('/login', multer().none(), async (req, res) => {
     })
 })
 
-userRouter.get('/all', authenticateJwt(['admin']), async (req, res) => {
-    userModel.getAll(req, (err, resp) => {
+userRouter.get('/list', authenticateJwt(['admin']), async (req, res) => {
+    userModel.getList(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })

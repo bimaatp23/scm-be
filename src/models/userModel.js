@@ -32,7 +32,7 @@ export const login = (req, callback) => {
     )
 }
 
-export const getAll = (req, callback) => {
+export const getList = (req, callback) => {
     const db = mysql.createConnection(dbConfig)
     db.query(
         'SELECT * FROM users',
@@ -40,11 +40,14 @@ export const getAll = (req, callback) => {
             if (err) {
                 callback(err, errorResp(err.message))
             } else {
-                const filteredResult = result.map((element) => {
-                    return {
-                        name: element.name,
-                        username: element.username,
-                        role: element.role
+                const filteredResult = []
+                result.map((data) => {
+                    if (['gudang', 'pengadaan', 'produksi', 'distribusi'].some(role => role == data.role)) {
+                        filteredResult.push({
+                            name: data.name,
+                            username: data.username,
+                            role: data.role
+                        })
                     }
                 })
                 callback(null, baseResp(200, 'Get all users success', filteredResult))
