@@ -52,7 +52,7 @@ export const update = (req, callback) => {
             } else {
                 const db2 = mysql.createConnection(dbConfig)
                 db2.query(
-                    'UPDATE inventorys set item_name = ?, description = ?, unit = ?, price = ? WHERE id = ?',
+                    'UPDATE inventorys SET item_name = ?, description = ?, unit = ?, price = ? WHERE id = ?',
                     [body.item_name, body.description, body.unit, body.price, body.id],
                     (err2) => {
                         if (err2) {
