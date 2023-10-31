@@ -17,6 +17,12 @@ userRouter.get('/list', authenticateJwt(['admin']), async (req, res) => {
     })
 })
 
+userRouter.post('/create-user', multer().none(), authenticateJwt(['admin']), async (req, res) => {
+    userModel.createUser(req, (err, resp) => {
+        return res.status(resp.error_schema.error_code).json(resp)
+    })
+})
+
 userRouter.post('/create-retail', multer().none(), async (req, res) => {
     userModel.createRetail(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)

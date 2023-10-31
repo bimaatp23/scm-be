@@ -57,6 +57,43 @@ export const getList = (req, callback) => {
     )
 }
 
+export const createUser = (req, callback) => {
+    const body = req.body
+    const db = mysql.createConnection(dbConfig)
+    const defaultPassword = 'ilkomjaya2023'
+    db.query(
+        'SELECT * FROM users WHERE username = ?',
+        [body.username],
+        (err, result) => {
+            if (err) {
+                callback(err, errorResp(err.message))
+            } else if (result.length != 0) {
+                callback(null, baseResp(409, 'Username already exists'))
+            } else {
+                const db2 = mysql.createConnection(dbConfig)
+                db2.query(
+                    'INSERT INTO users VALUES (NULL, ?, ?, ?, ?)',
+                    [body.name, body.username, body.role, defaultPassword],
+                    (err2) => {
+                        if (err2) {
+                            callback(err2, errorResp(err2.message))
+                        } else {
+                            callback(null, baseResp(200, 'Create user success', {
+                                name: body.name,
+                                username: body.username,
+                                role: body.role,
+                                password: defaultPassword
+                            }))
+                        }
+                    }
+                )
+                db2.end()
+            }
+            db.end()
+        }
+    )
+}
+
 export const createRetail = (req, callback) => {
     const body = req.body
     const db = mysql.createConnection(dbConfig)
