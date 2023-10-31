@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken'
 import mysql from 'mysql2'
 import { baseResp, errorResp } from '../../baseResp.js'
 import { dbConfig } from '../../db.js'
@@ -15,16 +14,10 @@ export const login = (req, callback) => {
             } else if (result.length == 0) {
                 callback(null, baseResp(401, 'Incorrect username or password'))
             } else {
-                const payload = {
+                callback(null, baseResp(200, 'Login success', {
                     name: result[0].name,
                     username: result[0].username,
                     role: result[0].role
-                }
-                callback(null, baseResp(200, 'Login success', {
-                    ...payload,
-                    token: jwt.sign(payload, process.env.SECRET_KEY, {
-                        algorithm: 'HS256'
-                    })
                 }))
             }
             db.end()
