@@ -129,6 +129,41 @@ export const updateUser = (req, callback) => {
     )
 }
 
+export const deleteUser = (req, callback) => {
+    const body = req.body
+    const db = mysql.createConnection(dbConfig)
+    db.query(
+        'SELECT * FROM users WHERE username = ?',
+        [body.username],
+        (err, result) => {
+            if (err) {
+                callback(err, errorResp(err.message))
+            } else if (result.length == 0) {
+                callback(null, baseResp(409, 'Username not found'))
+            } else {
+                const db2 = mysql.createConnection(dbConfig)
+                db2.query(
+                    'DELETE FROM users WHERE username = ?',
+                    [body.username],
+                    (err2) => {
+                        if (err2) {
+                            callback(err2, errorResp(err2.message))
+                        } else {
+                            callback(null, baseResp(200, 'Delete user success', {
+                                name: result[0].name,
+                                username: result[0].username,
+                                role: result[0].role
+                            }))
+                        }
+                    }
+                )
+                db2.end()
+            }
+            db.end()
+        }
+    )
+}
+
 export const createRetail = (req, callback) => {
     const body = req.body
     const db = mysql.createConnection(dbConfig)

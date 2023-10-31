@@ -29,6 +29,12 @@ userRouter.post('/update-user', multer().none(), authenticateJwt(['admin']), che
     })
 })
 
+userRouter.post('/delete-user', multer().none(), authenticateJwt(['admin']), checkRequest(['username']), async (req, res) => {
+    userModel.deleteUser(req, (err, resp) => {
+        return res.status(resp.error_schema.error_code).json(resp)
+    })
+})
+
 userRouter.post('/create-retail', multer().none(), checkRequest(['username', 'name', 'business_name', 'address', 'email', 'phone']), async (req, res) => {
     userModel.createRetail(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
