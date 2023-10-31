@@ -1,11 +1,11 @@
 import express from 'express'
 import multer from 'multer'
 import * as userModel from '../models/userModel.js'
-import { authenticateJwt } from './authMiddleware.js'
+import { authenticateJwt, checkRequest } from './authMiddleware.js'
 
 export const userRouter = express.Router()
 
-userRouter.post('/login', multer().none(), async (req, res) => {
+userRouter.post('/login', multer().none(), checkRequest(['username', 'password']), async (req, res) => {
     userModel.login(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
@@ -23,7 +23,7 @@ userRouter.post('/create-user', multer().none(), authenticateJwt(['admin']), asy
     })
 })
 
-userRouter.post('/create-retail', multer().none(), async (req, res) => {
+userRouter.post('/create-retail', multer().none(), checkRequest(['username', 'name', 'business_name', 'address', 'email', 'phone']), async (req, res) => {
     userModel.createRetail(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
