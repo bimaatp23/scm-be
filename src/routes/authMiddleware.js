@@ -12,8 +12,10 @@ export const authenticateJwt = (allowedRole = []) => (req, res, next) => {
     if (err) {
       resp = baseResp(402, 'Invalid token')
       return res.status(invalidTokenResp.error_schema.error_code).json(invalidTokenResp)
-    } else if (!(allowedRole.some(role => role == payload.role))) {
-      return res.status(unauthorizedResp.error_schema.error_code).json(unauthorizedResp)
+    } else if (allowedRole.length > 0) {
+      if (!(allowedRole.some(role => role == payload.role))) {
+        return res.status(unauthorizedResp.error_schema.error_code).json(unauthorizedResp)
+      }
     }
     req.payload = payload
     next()
