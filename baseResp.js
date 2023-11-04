@@ -20,21 +20,21 @@ export const baseResp = (errorCode, errorMessage, result) => {
 export const badRequestResp = {
     error_schema: {
         error_code: 400,
-        error_message: 'Bad Request'
+        error_message: "Bad Request"
     }
 }
 
 export const unauthorizedResp = {
     error_schema: {
         error_code: 401,
-        error_message: 'Unauthorized'
+        error_message: "Unauthorized"
     }
 }
 
 export const invalidTokenResp = {
     error_schema: {
         error_code: 402,
-        error_message: 'Invalid Token'
+        error_message: "Invalid Token"
     }
 }
 

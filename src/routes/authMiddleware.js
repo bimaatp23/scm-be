@@ -1,8 +1,8 @@
-import jwt from 'jsonwebtoken'
-import { badRequestResp, baseResp, invalidTokenResp, unauthorizedResp } from '../../baseResp.js'
+import jwt from "jsonwebtoken"
+import { badRequestResp, baseResp, invalidTokenResp, unauthorizedResp } from "../../baseResp.js"
 
 export const authenticateJwt = (allowedRole = []) => (req, res, next) => {
-  const token = req.header('Authorization')?.split(' ')[1]
+  const token = req.header("Authorization")?.split(" ")[1]
   let resp
   if (!token) {
     return res.status(unauthorizedResp.error_schema.error_code).json(unauthorizedResp)
@@ -10,7 +10,7 @@ export const authenticateJwt = (allowedRole = []) => (req, res, next) => {
 
   jwt.verify(token, process.env.SECRET_KEY, (err, payload) => {
     if (err) {
-      resp = baseResp(402, 'Invalid token')
+      resp = baseResp(402, "Invalid token")
       return res.status(invalidTokenResp.error_schema.error_code).json(invalidTokenResp)
     } else if (allowedRole.length > 0) {
       if (!(allowedRole.some(role => role == payload.role))) {
