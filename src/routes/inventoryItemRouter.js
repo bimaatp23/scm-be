@@ -10,9 +10,3 @@ inventoryItemRouter.post("/create", multer().none(), authenticateJwt(["gudang"])
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
-
-inventoryItemRouter.get("/stock", authenticateJwt(["gudang"]), async (req, res) => {
-    new inventoryItemModel().stock(req, (err, resp) => {
-        return res.status(resp.error_schema.error_code).json(resp)
-    })
-})

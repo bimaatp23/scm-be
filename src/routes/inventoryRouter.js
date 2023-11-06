@@ -5,6 +5,12 @@ import { authenticateJwt, checkRequest } from "./authMiddleware.js"
 
 export const inventoryRouter = express.Router()
 
+inventoryRouter.get("/stock", authenticateJwt(["admin", "gudang"]), async (req, res) => {
+    new inventoryModel().stock(req, (err, resp) => {
+        return res.status(resp.error_schema.error_code).json(resp)
+    })
+})
+
 inventoryRouter.post("/create", multer().none(), authenticateJwt(["admin"]), checkRequest(["item_name", "description", "unit", "price"]), async (req, res) => {
     new inventoryModel().create(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)

@@ -3,6 +3,36 @@ import { baseResp, errorResp } from "../../baseResp.js"
 import { dbConfig } from "../../db.js"
 
 export default class inventoryModel {
+    stock(req, callback) {
+        const db = mysql.createConnection(dbConfig)
+        db.query(
+            `
+            SELECT
+                i.id,
+                i.item_name,
+                i.description,
+                i.unit,
+                i.price,
+                COALESCE(SUM(CASE WHEN ii.status = "Masuk" THEN ii.quantity ELSE 0 END), 0) -
+                COALESCE(SUM(CASE WHEN ii.status = "Keluar" THEN ii.quantity ELSE 0 END), 0) AS stock
+            FROM
+                inventorys i
+            LEFT JOIN
+                inventory_items ii ON i.id = ii.inventory_id
+            GROUP BY
+                i.item_name, i.unit
+            `,
+            (err, result) => {
+                if (err) {
+                    callback(err, errorResp(err.message))
+                } else {
+                    callback(null, baseResp(200, "Get stock inventory item success", result))
+                }
+                db.end()
+            }
+        )
+    }
+
     create(req, callback) {
         const body = req.body
         const db = mysql.createConnection(dbConfig)

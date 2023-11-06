@@ -54,7 +54,7 @@ export default class userModel {
     create(req, callback) {
         const body = req.body
         const db = mysql.createConnection(dbConfig)
-        const defaultPassword = "ilkomjaya2023"
+        const defaultPassword = "scm"
         db.query(
             "SELECT * FROM users WHERE username = ?",
             [body.username],
