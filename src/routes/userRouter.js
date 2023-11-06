@@ -1,6 +1,6 @@
 import express from "express"
 import multer from "multer"
-import userModel from "../models/UserModel.js"
+import userModel from "../models/userModel.js"
 import { authenticateJwt, checkRequest } from "./authMiddleware.js"
 
 export const userRouter = express.Router()

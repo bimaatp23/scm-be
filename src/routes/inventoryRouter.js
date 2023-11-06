@@ -28,3 +28,9 @@ inventoryRouter.post("/delete", multer().none(), authenticateJwt(["admin"]), che
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
+
+inventoryRouter.post("/create-item", multer().none(), authenticateJwt(["gudang"]), checkRequest(["inventory_id", "quantity", "status"]), async (req, res) => {
+    new inventoryModel().createItem(req, (err, resp) => {
+        return res.status(resp.error_schema.error_code).json(resp)
+    })
+})
