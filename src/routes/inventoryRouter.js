@@ -11,19 +11,19 @@ inventoryRouter.get("/stock", authenticateJwt(["admin", "gudang", "retail"]), as
     })
 })
 
-inventoryRouter.post("/create", multer().none(), authenticateJwt(["admin"]), checkRequest(["item_name", "description", "unit", "price"]), async (req, res) => {
+inventoryRouter.post("/create", multer().none(), authenticateJwt(["gudang"]), checkRequest(["item_name", "description", "unit", "price"]), async (req, res) => {
     new inventoryModel().create(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
 
-inventoryRouter.post("/update", multer().none(), authenticateJwt(["admin"]), checkRequest(["id", "item_name", "description", "unit", "price"]), async (req, res) => {
+inventoryRouter.post("/update", multer().none(), authenticateJwt(["gudang"]), checkRequest(["id", "item_name", "description", "unit", "price"]), async (req, res) => {
     new inventoryModel().update(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
 
-inventoryRouter.post("/delete", multer().none(), authenticateJwt(["admin"]), checkRequest(["id"]), async (req, res) => {
+inventoryRouter.post("/delete", multer().none(), authenticateJwt(["gudang"]), checkRequest(["id"]), async (req, res) => {
     new inventoryModel().delete(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })

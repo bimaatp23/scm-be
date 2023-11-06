@@ -18,21 +18,35 @@ export default class orderModel {
                             if (err2) {
                                 callback(err2, errorResp(err2.message))
                             } else {
-                                console.log(result)
-                                console.log(result2)
-                                let returnResult = result.map((data) => {
-                                    let items = []
-                                    result2.map((data2) => {
-                                        if (data.id == data2.order_id) {
-                                            items.push(data2)
+                                const db3 = mysql.createConnection(dbConfig)
+                                db3.query(
+                                    "SELECT * FROM retails",
+                                    (err3, result3) => {
+                                        if (err3) {
+                                            callback(err3, errorResp(err3.message))
+                                        } else {
+                                            let returnResult = result.map((data) => {
+                                                let items = result2.map((data2) => {
+                                                    if (data.id == data2.order_id) {
+                                                        return data2
+                                                    }
+                                                })
+                                                let detail_retail = result3.map((data3) => {
+                                                    if (data.user_retail == data3.username) {
+                                                        return data3
+                                                    }
+                                                })
+                                                return {
+                                                    ...data,
+                                                    items: items,
+                                                    detail_retail: detail_retail[0]
+                                                }
+                                            })
+                                            callback(null, baseResp(200, "Get order list success", returnResult))
                                         }
-                                    })
-                                    return {
-                                        ...data,
-                                        items: items
+                                        db3.end()
                                     }
-                                })
-                                callback(null, baseResp(200, "Get order list success", returnResult))
+                                )
                             }
                             db2.end()
                         }
