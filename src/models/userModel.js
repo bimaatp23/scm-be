@@ -44,7 +44,7 @@ export default class userModel {
                             })
                         }
                     })
-                    callback(null, baseResp(200, "Get all users success", filteredResult))
+                    callback(null, baseResp(200, "Get user list success", filteredResult))
                 }
                 db.end()
             }
