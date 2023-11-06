@@ -20,15 +20,15 @@ export default class orderModel {
                             } else {
                                 console.log(result)
                                 console.log(result2)
-                                let returnResult = result.map((element) => {
+                                let returnResult = result.map((data) => {
                                     let items = []
-                                    result2.map((element2) => {
-                                        if (element.id == element2.order_id) {
-                                            items.push(element2)
+                                    result2.map((data2) => {
+                                        if (data.id == data2.order_id) {
+                                            items.push(data2)
                                         }
                                     })
                                     return {
-                                        ...element,
+                                        ...data,
                                         items: items
                                     }
                                 })

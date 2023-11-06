@@ -25,8 +25,8 @@ export const authenticateJwt = (allowedRole = []) => (req, res, next) => {
 export const checkRequest = (allowedReq = []) => (req, res, next) => {
   if (allowedReq.length > 0) {
     let undefinedCount = 0
-    allowedReq.map(element => {
-      if (req.body[element] == undefined) {
+    allowedReq.map((data) => {
+      if (req.body[data] == undefined) {
         undefinedCount = undefinedCount + 1
       }
     })
