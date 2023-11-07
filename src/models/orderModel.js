@@ -26,14 +26,16 @@ export default class orderModel {
                                             callback(err3, errorResp(err3.message))
                                         } else {
                                             let returnResult = result.map((data) => {
-                                                let items = result2.map((data2) => {
+                                                let items = []
+                                                result2.map((data2) => {
                                                     if (data.id == data2.order_id) {
-                                                        return data2
+                                                        items.push(data2)
                                                     }
                                                 })
-                                                let detail_retail = result3.map((data3) => {
+                                                let detail_retail = []
+                                                result3.map((data3) => {
                                                     if (data.user_retail == data3.username) {
-                                                        return data3
+                                                        detail_retail.push(data3)
                                                     }
                                                 })
                                                 return {
