@@ -63,7 +63,7 @@ export default class orderModel {
         const body = req.body
         const db = mysql.createConnection(dbConfig)
         db.query(
-            "INSERT INTO orders VALUES(?, ?, ?, ?, ?, NULL, NULL)",
+            "INSERT INTO orders VALUES(?, ?, ?, ?, ?, NULL, NULL, NULL)",
             [body.order_id, body.user_retail, body.total, "Submitted", body.submitted_date],
             (err) => {
                 if (err) {
@@ -85,6 +85,23 @@ export default class orderModel {
                             db2.end()
                         }
                     )
+                }
+                db.end()
+            }
+        )
+    }
+
+    reject(req, callback) {
+        const body = req.body
+        const db = mysql.createConnection(dbConfig)
+        db.query(
+            "UPDATE orders SET status = ?, reject_date = ? WHERE id = ?",
+            ["Rejected", body.reject_date, body.order_id],
+            (err) => {
+                if (err) {
+                    callback(err, errorResp(err.message))
+                } else {
+                    callback(null, baseResp(200, "Reject order success"))
                 }
                 db.end()
             }
