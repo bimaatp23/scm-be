@@ -3,7 +3,7 @@ import { baseResp, errorResp } from "../../baseResp.js"
 import { dbConfig } from "../../db.js"
 
 export default class inventoryModel {
-    stock(req, callback) {
+    getList(req, callback) {
         const db = mysql.createConnection(dbConfig)
         db.query(
             `
@@ -27,6 +27,21 @@ export default class inventoryModel {
                     callback(err, errorResp(err.message))
                 } else {
                     callback(null, baseResp(200, "Get stock inventory item success", result))
+                }
+                db.end()
+            }
+        )
+    }
+
+    getItemList(req, callback) {
+        const db = mysql.createConnection(dbConfig)
+        db.query(
+            "SELECT * FROM inventory_items",
+            (err, result) => {
+                if (err) {
+                    callback(err, errorResp(err.message))
+                } else {
+                    callback(null, baseResp(200, "Get inventory item list success", result))
                 }
                 db.end()
             }
