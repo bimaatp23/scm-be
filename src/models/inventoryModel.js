@@ -1,6 +1,7 @@
 import mysql from "mysql2"
 import { baseResp, errorResp } from "../../baseResp.js"
 import { dbConfig } from "../../db.js"
+import BasicConstant from "../BasicConstant.js"
 
 export default class inventoryModel {
     getList(req, callback) {
@@ -13,8 +14,8 @@ export default class inventoryModel {
                 i.description,
                 i.unit,
                 i.price,
-                COALESCE(SUM(CASE WHEN ii.status = "Masuk" THEN ii.quantity ELSE 0 END), 0) -
-                COALESCE(SUM(CASE WHEN ii.status = "Keluar" THEN ii.quantity ELSE 0 END), 0) AS stock
+                COALESCE(SUM(CASE WHEN ii.status = ? THEN ii.quantity ELSE 0 END), 0) -
+                COALESCE(SUM(CASE WHEN ii.status = ? THEN ii.quantity ELSE 0 END), 0) AS stock
             FROM
                 inventorys i
             LEFT JOIN
@@ -22,6 +23,7 @@ export default class inventoryModel {
             GROUP BY
                 i.item_name, i.unit
             `,
+            [BasicConstant.ITEM_MASUK, BasicConstant.ITEM_KELUAR],
             (err, result) => {
                 if (err) {
                     callback(err, errorResp(err.message))
@@ -169,8 +171,8 @@ export default class inventoryModel {
                 } else {
                     const db2 = mysql.createConnection(dbConfig)
                     db2.query(
-                        "INSERT INTO inventory_items VALUES (NULL, ?, ?, ?)",
-                        [body.inventory_id, body.quantity, body.status],
+                        "INSERT INTO inventory_items VALUES (NULL, ?, ?, ?, ?)",
+                        [body.inventory_id, body.quantity, body.description, body.status],
                         (err2) => {
                             if (err2) {
                                 callback(err2, errorResp(err2.message))

@@ -1,6 +1,7 @@
 import mysql from "mysql2"
 import { baseResp, errorResp } from "../../baseResp.js"
 import { dbConfig } from "../../db.js"
+import BasicConstant from "../BasicConstant.js"
 
 export default class orderModel {
     getList(req, callback) {
@@ -64,7 +65,7 @@ export default class orderModel {
         const db = mysql.createConnection(dbConfig)
         db.query(
             "INSERT INTO orders VALUES(?, ?, ?, ?, ?, NULL, NULL, NULL)",
-            [body.order_id, body.user_retail, body.total, "Submitted", body.submitted_date],
+            [body.order_id, body.user_retail, body.total, BasicConstant.ORDER_STATUS_SUBMITTED, body.submitted_date],
             (err) => {
                 if (err) {
                     callback(err, errorResp(err.message))
@@ -96,7 +97,7 @@ export default class orderModel {
         const db = mysql.createConnection(dbConfig)
         db.query(
             "UPDATE orders SET status = ?, reject_date = ? WHERE id = ?",
-            ["Rejected", body.reject_date, body.order_id],
+            [BasicConstant.ORDER_STATUS_REJECTED, body.reject_date, body.order_id],
             (err) => {
                 if (err) {
                     callback(err, errorResp(err.message))

@@ -1,41 +1,42 @@
 import express from "express"
 import multer from "multer"
+import BasicConstant from "../BasicConstant.js"
 import inventoryModel from "../models/inventoryModel.js"
 import { authenticateJwt, checkRequest } from "./authMiddleware.js"
 
 export const inventoryRouter = express.Router()
 
-inventoryRouter.get("/list", authenticateJwt(["admin", "gudang", "retail"]), async (req, res) => {
+inventoryRouter.get("/list", authenticateJwt([BasicConstant.ROLE_ADMIN, BasicConstant.ROLE_GUDANG, BasicConstant.ROLE_RETAIL]), async (req, res) => {
     new inventoryModel().getList(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
 
-inventoryRouter.get("/item-list", authenticateJwt(["admin", "gudang"]), async (req, res) => {
+inventoryRouter.get("/item-list", authenticateJwt([BasicConstant.ROLE_ADMIN, BasicConstant.ROLE_GUDANG]), async (req, res) => {
     new inventoryModel().getItemList(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
 
-inventoryRouter.post("/create", multer().none(), authenticateJwt(["gudang"]), checkRequest(["item_name", "description", "unit", "price"]), async (req, res) => {
+inventoryRouter.post("/create", multer().none(), authenticateJwt([BasicConstant.ROLE_GUDANG]), checkRequest(["item_name", "description", "unit", "price"]), async (req, res) => {
     new inventoryModel().create(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
 
-inventoryRouter.post("/update", multer().none(), authenticateJwt(["gudang"]), checkRequest(["id", "item_name", "description", "unit", "price"]), async (req, res) => {
+inventoryRouter.post("/update", multer().none(), authenticateJwt([BasicConstant.ROLE_GUDANG]), checkRequest(["id", "item_name", "description", "unit", "price"]), async (req, res) => {
     new inventoryModel().update(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
 
-inventoryRouter.post("/delete", multer().none(), authenticateJwt(["gudang"]), checkRequest(["id"]), async (req, res) => {
+inventoryRouter.post("/delete", multer().none(), authenticateJwt([BasicConstant.ROLE_GUDANG]), checkRequest(["id"]), async (req, res) => {
     new inventoryModel().delete(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
 
-inventoryRouter.post("/create-item", multer().none(), authenticateJwt(["gudang"]), checkRequest(["inventory_id", "quantity", "status"]), async (req, res) => {
+inventoryRouter.post("/create-item", multer().none(), authenticateJwt([BasicConstant.ROLE_GUDANG]), checkRequest(["inventory_id", "quantity", "status"]), async (req, res) => {
     new inventoryModel().createItem(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })

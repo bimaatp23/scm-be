@@ -1,5 +1,6 @@
 import express from "express"
 import multer from "multer"
+import BasicConstant from "../BasicConstant.js"
 import userModel from "../models/userModel.js"
 import { authenticateJwt, checkRequest } from "./authMiddleware.js"
 
@@ -11,25 +12,25 @@ userRouter.post("/login", multer().none(), checkRequest(["username", "password"]
     })
 })
 
-userRouter.get("/list", authenticateJwt(["admin"]), async (req, res) => {
+userRouter.get("/list", authenticateJwt([BasicConstant.ROLE_ADMIN]), async (req, res) => {
     new userModel().getList(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
 
-userRouter.post("/create", multer().none(), authenticateJwt(["admin"]), checkRequest(["name", "username", "role"]), async (req, res) => {
+userRouter.post("/create", multer().none(), authenticateJwt([BasicConstant.ROLE_ADMIN]), checkRequest(["name", "username", "role"]), async (req, res) => {
     new userModel().create(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
 
-userRouter.post("/update", multer().none(), authenticateJwt(["admin"]), checkRequest(["name", "username", "role"]), async (req, res) => {
+userRouter.post("/update", multer().none(), authenticateJwt([BasicConstant.ROLE_ADMIN]), checkRequest(["name", "username", "role"]), async (req, res) => {
     new userModel().update(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
 
-userRouter.post("/delete", multer().none(), authenticateJwt(["admin"]), checkRequest(["username"]), async (req, res) => {
+userRouter.post("/delete", multer().none(), authenticateJwt([BasicConstant.ROLE_ADMIN]), checkRequest(["username"]), async (req, res) => {
     new userModel().delete(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
