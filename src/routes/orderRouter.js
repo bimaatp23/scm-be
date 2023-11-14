@@ -18,6 +18,12 @@ orderRouter.post("/create", multer().none(), authenticateJwt([BasicConstant.ROLE
     })
 })
 
+orderRouter.post("/cancel", multer().none(), authenticateJwt([BasicConstant.ROLE_RETAIL]), checkRequest(["order_id", "cancel_date"]), async (req, res) => {
+    new orderModel().cancel(req, (err, resp) => {
+        return res.status(resp.error_schema.error_code).json(resp)
+    })
+})
+
 orderRouter.post("/reject", multer().none(), authenticateJwt([BasicConstant.ROLE_DISTRIBUSI]), checkRequest(["order_id", "reject_date"]), async (req, res) => {
     new orderModel().reject(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)

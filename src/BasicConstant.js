@@ -14,5 +14,6 @@ export default class BasicConstant {
     static ORDER_STATUS_CANCELLED = "Cancelled"
     static ORDER_STATUS_REJECTED = "Rejected"
     static ORDER_STATUS_PROCESS = "Process"
-    static ORDER_STATUS_DONE = "Done"
+    static ORDER_STATUS_DELIVERY = "Delivery"
+    static ORDER_STATUS_ARRIVAL = "Arrival"
 }

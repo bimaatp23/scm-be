@@ -64,8 +64,8 @@ export default class orderModel {
         const body = req.body
         const db = mysql.createConnection(dbConfig)
         db.query(
-            "INSERT INTO orders VALUES(?, ?, ?, ?, ?, NULL, NULL, NULL)",
-            [body.order_id, body.user_retail, body.total, BasicConstant.ORDER_STATUS_SUBMITTED, body.submitted_date],
+            "INSERT INTO orders VALUES(?, ?, ?, ?, ?, NULL, NULL, NULL, NULL, NULL)",
+            [body.order_id, body.user_retail, body.total, BasicConstant.ORDER_STATUS_SUBMITTED, body.submit_date],
             (err) => {
                 if (err) {
                     callback(err, errorResp(err.message))
@@ -86,6 +86,23 @@ export default class orderModel {
                             db2.end()
                         }
                     )
+                }
+                db.end()
+            }
+        )
+    }
+    
+    cancel(req, callback) {
+        const body = req.body
+        const db = mysql.createConnection(dbConfig)
+        db.query(
+            "UPDATE orders SET status = ?, cancel_date = ? WHERE id = ?",
+            [BasicConstant.ORDER_STATUS_CANCELLED, body.cancel_date, body.order_id],
+            (err) => {
+                if (err) {
+                    callback(err, errorResp(err.message))
+                } else {
+                    callback(null, baseResp(200, "Cancel order success"))
                 }
                 db.end()
             }
