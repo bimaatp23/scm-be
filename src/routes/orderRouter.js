@@ -29,3 +29,9 @@ orderRouter.post("/reject", multer().none(), authenticateJwt([BasicConstant.ROLE
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
+
+orderRouter.post("/process", multer().none(), authenticateJwt([BasicConstant.ROLE_DISTRIBUSI]), checkRequest(["order_id", "process_date"]), async (req, res) => {
+    new orderModel().process(req, (err, resp) => {
+        return res.status(resp.error_schema.error_code).json(resp)
+    })
+})

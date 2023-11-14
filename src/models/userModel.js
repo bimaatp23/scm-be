@@ -1,6 +1,7 @@
 import mysql from "mysql2"
 import { baseResp, errorResp } from "../../baseResp.js"
 import { dbConfig } from "../../db.js"
+import BasicConstant from "../BasicConstant.js"
 
 export default class userModel {
     login(req, callback) {
@@ -12,7 +13,7 @@ export default class userModel {
             (err, result) => {
                 if (err) {
                     callback(err, errorResp(err.message))
-                } else if (result.length == 0) {
+                } else if (result.length === 0) {
                     callback(null, baseResp(401, "Incorrect username or password"))
                 } else {
                     callback(null, baseResp(200, "Login success", {
@@ -36,7 +37,7 @@ export default class userModel {
                 } else {
                     const filteredResult = []
                     result.map((data) => {
-                        if (["gudang", "pengadaan", "produksi", "distribusi"].some(role => role == data.role)) {
+                        if ([BasicConstant.ROLE_GUDANG, BasicConstant.ROLE_PENGADAAN, BasicConstant.ROLE_PRODUKSI, BasicConstant.ROLE_DISTRIBUSI].some(role => role === data.role)) {
                             filteredResult.push({
                                 name: data.name,
                                 username: data.username,
@@ -97,7 +98,7 @@ export default class userModel {
             (err, result) => {
                 if (err) {
                     callback(err, errorResp(err.message))
-                } else if (result.length == 0) {
+                } else if (result.length === 0) {
                     callback(null, baseResp(404, "Username not found"))
                 } else {
                     const db2 = mysql.createConnection(dbConfig)
@@ -132,7 +133,7 @@ export default class userModel {
             (err, result) => {
                 if (err) {
                     callback(err, errorResp(err.message))
-                } else if (result.length == 0) {
+                } else if (result.length === 0) {
                     callback(null, baseResp(404, "Username not found"))
                 } else {
                     const db2 = mysql.createConnection(dbConfig)
@@ -167,7 +168,7 @@ export default class userModel {
             (err, result) => {
                 if (err) {
                     callback(err, errorResp(err.message))
-                } else if (result.length == 0) {
+                } else if (result.length === 0) {
                     callback(null, baseResp(404, "Username not found"))
                 } else if (result[0].password != body.old_password) {
                     callback(null, baseResp(401, "Incorrect old password"))

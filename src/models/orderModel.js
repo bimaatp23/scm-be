@@ -29,13 +29,13 @@ export default class orderModel {
                                             let returnResult = result.map((data) => {
                                                 let items = []
                                                 result2.map((data2) => {
-                                                    if (data.id == data2.order_id) {
+                                                    if (data.id === data2.order_id) {
                                                         items.push(data2)
                                                     }
                                                 })
                                                 let detail_retail = []
                                                 result3.map((data3) => {
-                                                    if (data.user_retail == data3.username) {
+                                                    if (data.user_retail === data3.username) {
                                                         detail_retail.push(data3)
                                                     }
                                                 })
@@ -91,7 +91,7 @@ export default class orderModel {
             }
         )
     }
-    
+
     cancel(req, callback) {
         const body = req.body
         const db = mysql.createConnection(dbConfig)
@@ -120,6 +120,23 @@ export default class orderModel {
                     callback(err, errorResp(err.message))
                 } else {
                     callback(null, baseResp(200, "Reject order success"))
+                }
+                db.end()
+            }
+        )
+    }
+
+    process(req, callback) {
+        const body = req.body
+        const db = mysql.createConnection(dbConfig)
+        db.query(
+            "UPDATE orders SET status = ?, process_date = ? WHERE id = ?",
+            [BasicConstant.ORDER_STATUS_PROCESS, body.process_date, body.order_id],
+            (err) => {
+                if (err) {
+                    callback(err, errorResp(err.message))
+                } else {
+                    callback(null, baseResp(200, "Process order success"))
                 }
                 db.end()
             }

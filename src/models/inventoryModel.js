@@ -95,7 +95,7 @@ export default class inventoryModel {
             (err, result) => {
                 if (err) {
                     callback(err, errorResp(err.message))
-                } else if (result.length == 0) {
+                } else if (result.length === 0) {
                     callback(null, baseResp(404, "Item id not found"))
                 } else {
                     const db2 = mysql.createConnection(dbConfig)
@@ -131,7 +131,7 @@ export default class inventoryModel {
             (err, result) => {
                 if (err) {
                     callback(err, errorResp(err.message))
-                } else if (result.length == 0) {
+                } else if (result.length === 0) {
                     callback(null, baseResp(404, "Item id not found"))
                 } else {
                     const db2 = mysql.createConnection(dbConfig)
@@ -166,7 +166,7 @@ export default class inventoryModel {
             (err, result) => {
                 if (err) {
                     callback(err, errorResp(err.message))
-                } else if (result.length == 0) {
+                } else if (result.length === 0) {
                     callback(null, baseResp(404, "Item id not found"))
                 } else {
                     const db2 = mysql.createConnection(dbConfig)
