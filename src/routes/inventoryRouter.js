@@ -18,7 +18,7 @@ inventoryRouter.get("/item-list", authenticateJwt([BasicConstant.ROLE_ADMIN, Bas
     })
 })
 
-inventoryRouter.post("/create", multer().none(), authenticateJwt([BasicConstant.ROLE_GUDANG]), checkRequest(["item_name", "description", "unit", "price"]), async (req, res) => {
+inventoryRouter.post("/create", multer().none(), authenticateJwt([BasicConstant.ROLE_GUDANG]), checkRequest(["item_name", "description", "unit", "tipe", "price"]), async (req, res) => {
     new inventoryModel().create(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })

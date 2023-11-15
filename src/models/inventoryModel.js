@@ -13,6 +13,7 @@ export default class inventoryModel {
                 i.item_name,
                 i.description,
                 i.unit,
+                i.tipe,
                 i.price,
                 COALESCE(SUM(CASE WHEN ii.status = ? THEN ii.quantity ELSE 0 END), 0) -
                 COALESCE(SUM(CASE WHEN ii.status = ? THEN ii.quantity ELSE 0 END), 0) AS stock
@@ -59,13 +60,13 @@ export default class inventoryModel {
             (err, result) => {
                 if (err) {
                     callback(err, errorResp(err.message))
-                } else if (result.length != 0) {
+                } else if (result.length !== 0) {
                     callback(null, baseResp(409, "Item name already exists"))
                 } else {
                     const db2 = mysql.createConnection(dbConfig)
                     db2.query(
-                        "INSERT INTO inventorys VALUES (NULL, ?, ?, ?, ?)",
-                        [body.item_name, body.description, body.unit, body.price],
+                        "INSERT INTO inventorys VALUES (NULL, ?, ?, ?, ?, ?)",
+                        [body.item_name, body.description, body.unit, body.tipe, body.price],
                         (err2) => {
                             if (err2) {
                                 callback(err2, errorResp(err2.message))

@@ -64,7 +64,7 @@ export default class orderModel {
         const body = req.body
         const db = mysql.createConnection(dbConfig)
         db.query(
-            "INSERT INTO orders VALUES(?, ?, ?, ?, ?, NULL, NULL, NULL, NULL, NULL)",
+            "INSERT INTO orders VALUES(?, ?, ?, ?, ?, NULL, NULL, NULL, NULL, NULL, NULL)",
             [body.order_id, body.user_retail, body.total, BasicConstant.ORDER_STATUS_SUBMITTED, body.submit_date],
             (err) => {
                 if (err) {
