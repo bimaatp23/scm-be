@@ -23,6 +23,8 @@ export default class inventoryModel {
                 inventory_items ii ON i.id = ii.inventory_id
             GROUP BY
                 i.item_name, i.unit
+            ORDER BY
+                i.id
             `,
             [BasicConstant.ITEM_MASUK, BasicConstant.ITEM_KELUAR],
             (err, result) => {
@@ -75,6 +77,7 @@ export default class inventoryModel {
                                     item_name: body.item_name,
                                     description: body.description,
                                     unit: body.unit,
+                                    tipe: body.tipe,
                                     price: body.price
                                 }))
                             }
@@ -101,8 +104,8 @@ export default class inventoryModel {
                 } else {
                     const db2 = mysql.createConnection(dbConfig)
                     db2.query(
-                        "UPDATE inventorys SET item_name = ?, description = ?, unit = ?, price = ? WHERE id = ?",
-                        [body.item_name, body.description, body.unit, body.price, body.id],
+                        "UPDATE inventorys SET item_name = ?, description = ?, unit = ?, tipe = ?, price = ? WHERE id = ?",
+                        [body.item_name, body.description, body.unit, body.tipe, body.price, body.id],
                         (err2) => {
                             if (err2) {
                                 callback(err2, errorResp(err2.message))
@@ -111,6 +114,7 @@ export default class inventoryModel {
                                     item_name: body.item_name,
                                     description: body.description,
                                     unit: body.unit,
+                                    tipe: body.tipe,
                                     price: body.price
                                 }))
                             }

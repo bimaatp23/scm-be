@@ -136,7 +136,22 @@ export default class orderModel {
                 if (err) {
                     callback(err, errorResp(err.message))
                 } else {
-                    callback(null, baseResp(200, "Process order success"))
+                    const db2 = mysql.createConnection(dbConfig)
+                    let sqlQuery = "INSERT INTO inventory_items VALUES "
+                    let sqlValues = JSON.parse(body.data).map((data) => {
+                        return `(NULL, ${data.inventory_id}, '${data.quantity}', 'Order ${body.order_id}', '${BasicConstant.ITEM_KELUAR}')`
+                    })
+                    db2.query(
+                        sqlQuery + sqlValues.join(","),
+                        (err2) => {
+                            if (err2) {
+                                callback(err2, errorResp(err2.message))
+                            } else {
+                                callback(null, baseResp(200, "Process order success"))
+                            }
+                            db2.end()
+                        }
+                    )
                 }
                 db.end()
             }

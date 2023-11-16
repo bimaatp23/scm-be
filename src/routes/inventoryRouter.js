@@ -6,7 +6,7 @@ import { authenticateJwt, checkRequest } from "./authMiddleware.js"
 
 export const inventoryRouter = express.Router()
 
-inventoryRouter.get("/list", authenticateJwt([BasicConstant.ROLE_ADMIN, BasicConstant.ROLE_GUDANG, BasicConstant.ROLE_RETAIL]), async (req, res) => {
+inventoryRouter.get("/list", authenticateJwt([BasicConstant.ROLE_ADMIN, BasicConstant.ROLE_GUDANG, BasicConstant.ROLE_DISTRIBUSI, BasicConstant.ROLE_RETAIL]), async (req, res) => {
     new inventoryModel().getList(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
@@ -18,19 +18,19 @@ inventoryRouter.get("/item-list", authenticateJwt([BasicConstant.ROLE_ADMIN, Bas
     })
 })
 
-inventoryRouter.post("/create", multer().none(), authenticateJwt([BasicConstant.ROLE_GUDANG]), checkRequest(["item_name", "description", "unit", "tipe", "price"]), async (req, res) => {
+inventoryRouter.post("/create", multer().none(), authenticateJwt([BasicConstant.ROLE_ADMIN]), checkRequest(["item_name", "description", "unit", "tipe", "price"]), async (req, res) => {
     new inventoryModel().create(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
 
-inventoryRouter.post("/update", multer().none(), authenticateJwt([BasicConstant.ROLE_GUDANG]), checkRequest(["id", "item_name", "description", "unit", "price"]), async (req, res) => {
+inventoryRouter.post("/update", multer().none(), authenticateJwt([BasicConstant.ROLE_ADMIN]), checkRequest(["id", "item_name", "description", "unit", "tipe", "price"]), async (req, res) => {
     new inventoryModel().update(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
 
-inventoryRouter.post("/delete", multer().none(), authenticateJwt([BasicConstant.ROLE_GUDANG]), checkRequest(["id"]), async (req, res) => {
+inventoryRouter.post("/delete", multer().none(), authenticateJwt([BasicConstant.ROLE_ADMIN]), checkRequest(["id"]), async (req, res) => {
     new inventoryModel().delete(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })
