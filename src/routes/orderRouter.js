@@ -41,3 +41,9 @@ orderRouter.post("/delivery", multer().none(), authenticateJwt([BasicConstant.RO
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
+
+orderRouter.post("/arrival", multer().none(), authenticateJwt([BasicConstant.ROLE_RETAIL]), checkRequest(["order_id", "arrival_date"]), async (req, res) => {
+    new orderModel().arrival(req, (err, resp) => {
+        return res.status(resp.error_schema.error_code).json(resp)
+    })
+})

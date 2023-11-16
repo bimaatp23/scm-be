@@ -174,4 +174,21 @@ export default class orderModel {
             }
         )
     }
+
+    arrival(req, callback) {
+        const body = req.body
+        const db = mysql.createConnection(dbConfig)
+        db.query(
+            "UPDATE orders SET status = ?, arrival_date = ? WHERE id = ?",
+            [BasicConstant.ORDER_STATUS_ARRIVAL, body.arrival_date, body.order_id],
+            (err) => {
+                if (err) {
+                    callback(err, errorResp(err.message))
+                } else {
+                    callback(null, baseResp(200, "Arrival order success"))
+                }
+                db.end()
+            }
+        )
+    }
 }
