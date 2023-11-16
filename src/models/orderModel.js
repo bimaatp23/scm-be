@@ -191,4 +191,21 @@ export default class orderModel {
             }
         )
     }
+
+    done(req, callback) {
+        const body = req.body
+        const db = mysql.createConnection(dbConfig)
+        db.query(
+            "UPDATE orders SET status = ?, done_date = ? WHERE id = ?",
+            [BasicConstant.ORDER_STATUS_DONE, body.done_date, body.order_id],
+            (err) => {
+                if (err) {
+                    callback(err, errorResp(err.message))
+                } else {
+                    callback(null, baseResp(200, "Done order success"))
+                }
+                db.end()
+            }
+        )
+    }
 }
