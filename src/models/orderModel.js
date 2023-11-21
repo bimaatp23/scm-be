@@ -65,7 +65,7 @@ export default class orderModel {
         const db = mysql.createConnection(dbConfig)
         db.query(
             "INSERT INTO orders VALUES(?, ?, ?, ?, ?, NULL, NULL, NULL, NULL, NULL, NULL)",
-            [body.order_id, body.user_retail, body.total, BasicConstant.ORDER_STATUS_SUBMITTED, body.submit_date],
+            [body.order_id, body.user_retail, body.total, BasicConstant.STATUS_SUBMITTED, body.submit_date],
             (err) => {
                 if (err) {
                     callback(err, errorResp(err.message))
@@ -97,7 +97,7 @@ export default class orderModel {
         const db = mysql.createConnection(dbConfig)
         db.query(
             "UPDATE orders SET status = ?, cancel_date = ? WHERE id = ?",
-            [BasicConstant.ORDER_STATUS_CANCELLED, body.cancel_date, body.order_id],
+            [BasicConstant.STATUS_CANCELLED, body.cancel_date, body.order_id],
             (err) => {
                 if (err) {
                     callback(err, errorResp(err.message))
@@ -114,7 +114,7 @@ export default class orderModel {
         const db = mysql.createConnection(dbConfig)
         db.query(
             "UPDATE orders SET status = ?, reject_date = ? WHERE id = ?",
-            [BasicConstant.ORDER_STATUS_REJECTED, body.reject_date, body.order_id],
+            [BasicConstant.STATUS_REJECTED, body.reject_date, body.order_id],
             (err) => {
                 if (err) {
                     callback(err, errorResp(err.message))
@@ -131,7 +131,7 @@ export default class orderModel {
         const db = mysql.createConnection(dbConfig)
         db.query(
             "UPDATE orders SET status = ?, process_date = ? WHERE id = ?",
-            [BasicConstant.ORDER_STATUS_PROCESS, body.process_date, body.order_id],
+            [BasicConstant.STATUS_PROCESS, body.process_date, body.order_id],
             (err) => {
                 if (err) {
                     callback(err, errorResp(err.message))
@@ -163,7 +163,7 @@ export default class orderModel {
         const db = mysql.createConnection(dbConfig)
         db.query(
             "UPDATE orders SET status = ?, delivery_date = ? WHERE id = ?",
-            [BasicConstant.ORDER_STATUS_DELIVERY, body.delivery_date, body.order_id],
+            [BasicConstant.STATUS_DELIVERY, body.delivery_date, body.order_id],
             (err) => {
                 if (err) {
                     callback(err, errorResp(err.message))
@@ -180,7 +180,7 @@ export default class orderModel {
         const db = mysql.createConnection(dbConfig)
         db.query(
             "UPDATE orders SET status = ?, arrival_date = ? WHERE id = ?",
-            [BasicConstant.ORDER_STATUS_ARRIVAL, body.arrival_date, body.order_id],
+            [BasicConstant.STATUS_ARRIVAL, body.arrival_date, body.order_id],
             (err) => {
                 if (err) {
                     callback(err, errorResp(err.message))
@@ -197,7 +197,7 @@ export default class orderModel {
         const db = mysql.createConnection(dbConfig)
         db.query(
             "UPDATE orders SET status = ?, done_date = ? WHERE id = ?",
-            [BasicConstant.ORDER_STATUS_DONE, body.done_date, body.order_id],
+            [BasicConstant.STATUS_DONE, body.done_date, body.order_id],
             (err) => {
                 if (err) {
                     callback(err, errorResp(err.message))
