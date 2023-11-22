@@ -29,3 +29,9 @@ productionRouter.post("/reject", multer().none(), authenticateJwt([BasicConstant
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
+
+productionRouter.post("/process", multer().none(), authenticateJwt([BasicConstant.ROLE_GUDANG]), checkRequest(["production_id", "process_date", "material"]), async (req, res) => {
+    new productionModel().process(req, (err, resp) => {
+        return res.status(resp.error_schema.error_code).json(resp)
+    })
+})

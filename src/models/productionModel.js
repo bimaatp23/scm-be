@@ -91,6 +91,38 @@ export default class productionModel {
         )
     }
 
+    process(req, callback) {
+        const body = req.body
+        const db = mysql.createConnection(dbConfig)
+        db.query(
+            "UPDATE productions SET status = ?, process_date = ? WHERE id = ?",
+            [BasicConstant.STATUS_PROCESS, body.process_date, body.production_id],
+            (err) => {
+                if (err) {
+                    callback(err, errorResp(err.message))
+                } else {
+                    const db2 = mysql.createConnection(dbConfig)
+                    let sqlQuery = "INSERT INTO inventory_items VALUES "
+                    let sqlValues = JSON.parse(body.material).map((data) => {
+                        return `(NULL, ${data.inventory_id}, '${data.quantity}', 'Production ${body.production_id}', '${BasicConstant.ITEM_KELUAR}')`
+                    })
+                    db2.query(
+                        sqlQuery + sqlValues.join(","),
+                        (err2) => {
+                            if (err2) {
+                                callback(err2, errorResp(err2.message))
+                            } else {
+                                callback(null, baseResp(200, "Process production success"))
+                            }
+                            db2.end()
+                        }
+                    )
+                }
+                db.end()
+            }
+        )
+    }
+
     reject(req, callback) {
         const body = req.body
         const db = mysql.createConnection(dbConfig)
