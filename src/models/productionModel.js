@@ -91,6 +91,23 @@ export default class productionModel {
         )
     }
 
+    reject(req, callback) {
+        const body = req.body
+        const db = mysql.createConnection(dbConfig)
+        db.query(
+            "UPDATE productions SET status = ?, reject_date = ? WHERE id = ?",
+            [BasicConstant.STATUS_REJECTED, body.reject_date, body.production_id],
+            (err) => {
+                if (err) {
+                    callback(err, errorResp(err.message))
+                } else {
+                    callback(null, baseResp(200, "Reject production success"))
+                }
+                db.end()
+            }
+        )
+    }
+
     process(req, callback) {
         const body = req.body
         const db = mysql.createConnection(dbConfig)
@@ -123,17 +140,32 @@ export default class productionModel {
         )
     }
 
-    reject(req, callback) {
+    done(req, callback) {
         const body = req.body
         const db = mysql.createConnection(dbConfig)
         db.query(
-            "UPDATE productions SET status = ?, reject_date = ? WHERE id = ?",
-            [BasicConstant.STATUS_REJECTED, body.reject_date, body.production_id],
+            "UPDATE productions SET status = ?, done_date = ? WHERE id = ?",
+            [BasicConstant.STATUS_DONE, body.done_date, body.production_id],
             (err) => {
                 if (err) {
                     callback(err, errorResp(err.message))
                 } else {
-                    callback(null, baseResp(200, "Reject production success"))
+                    const db2 = mysql.createConnection(dbConfig)
+                    let sqlQuery = "INSERT INTO inventory_items VALUES "
+                    let sqlValues = JSON.parse(body.product).map((data) => {
+                        return `(NULL, ${data.inventory_id}, '${data.quantity}', 'Production ${body.production_id}', '${BasicConstant.ITEM_MASUK}')`
+                    })
+                    db2.query(
+                        sqlQuery + sqlValues.join(","),
+                        (err2) => {
+                            if (err2) {
+                                callback(err2, errorResp(err2.message))
+                            } else {
+                                callback(null, baseResp(200, "Done production success"))
+                            }
+                            db2.end()
+                        }
+                    )
                 }
                 db.end()
             }

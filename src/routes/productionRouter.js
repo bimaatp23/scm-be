@@ -35,3 +35,9 @@ productionRouter.post("/process", multer().none(), authenticateJwt([BasicConstan
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
+
+productionRouter.post("/done", multer().none(), authenticateJwt([BasicConstant.ROLE_PRODUKSI]), checkRequest(["production_id", "done_date", "product"]), async (req, res) => {
+    new productionModel().done(req, (err, resp) => {
+        return res.status(resp.error_schema.error_code).json(resp)
+    })
+})
