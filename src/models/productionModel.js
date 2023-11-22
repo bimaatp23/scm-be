@@ -73,4 +73,21 @@ export default class productionModel {
             }
         )
     }
+
+    cancel(req, callback) {
+        const body = req.body
+        const db = mysql.createConnection(dbConfig)
+        db.query(
+            "UPDATE productions SET status = ?, cancel_date = ? WHERE id = ?",
+            [BasicConstant.STATUS_CANCELLED, body.cancel_date, body.production_id],
+            (err) => {
+                if (err) {
+                    callback(err, errorResp(err.message))
+                } else {
+                    callback(null, baseResp(200, "Cancel production success"))
+                }
+                db.end()
+            }
+        )
+    }
 }

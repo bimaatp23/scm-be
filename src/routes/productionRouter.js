@@ -17,3 +17,9 @@ productionRouter.post("/create", multer().none(), authenticateJwt([BasicConstant
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
+
+productionRouter.post("/cancel", multer().none(), authenticateJwt([BasicConstant.ROLE_PRODUKSI]), checkRequest(["production_id", "cancel_date"]), async (req, res) => {
+    new productionModel().cancel(req, (err, resp) => {
+        return res.status(resp.error_schema.error_code).json(resp)
+    })
+})
