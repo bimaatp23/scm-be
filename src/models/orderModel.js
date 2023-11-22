@@ -27,18 +27,8 @@ export default class orderModel {
                                             callback(err3, errorResp(err3.message))
                                         } else {
                                             let returnResult = result.map((data) => {
-                                                let items = []
-                                                result2.map((data2) => {
-                                                    if (data.id === data2.order_id) {
-                                                        items.push(data2)
-                                                    }
-                                                })
-                                                let detail_retail = []
-                                                result3.map((data3) => {
-                                                    if (data.user_retail === data3.username) {
-                                                        detail_retail.push(data3)
-                                                    }
-                                                })
+                                                const items = result2.filter((data2) => data.id === data2.order_id)
+                                                const detail_retail = result3.filter((data3) => data.user_retail === data3.username)
                                                 return {
                                                     ...data,
                                                     items: items,
