@@ -90,4 +90,21 @@ export default class productionModel {
             }
         )
     }
+
+    reject(req, callback) {
+        const body = req.body
+        const db = mysql.createConnection(dbConfig)
+        db.query(
+            "UPDATE productions SET status = ?, reject_date = ? WHERE id = ?",
+            [BasicConstant.STATUS_REJECTED, body.reject_date, body.production_id],
+            (err) => {
+                if (err) {
+                    callback(err, errorResp(err.message))
+                } else {
+                    callback(null, baseResp(200, "Reject production success"))
+                }
+                db.end()
+            }
+        )
+    }
 }
