@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import express from "express"
 import { inventoryRouter } from "./src/routes/inventoryRouter.js"
 import { orderRouter } from "./src/routes/orderRouter.js"
+import { productRouter } from "./src/routes/productRouter.js"
 import { productionRouter } from "./src/routes/productionRouter.js"
 import { userRouter } from "./src/routes/userRouter.js"
 
@@ -15,6 +16,7 @@ app.use("/user", userRouter)
 app.use("/inventory", inventoryRouter)
 app.use("/production", productionRouter)
 app.use("/order", orderRouter)
+app.use("/product", productRouter)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
