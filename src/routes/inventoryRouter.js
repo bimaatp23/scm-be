@@ -12,7 +12,7 @@ inventoryRouter.get("/list", authenticateJwt([BasicConstant.ROLE_ADMIN, BasicCon
     })
 })
 
-inventoryRouter.get("/item-list", authenticateJwt([BasicConstant.ROLE_ADMIN, BasicConstant.ROLE_GUDANG]), async (req, res) => {
+inventoryRouter.get("/item-list", authenticateJwt([BasicConstant.ROLE_ADMIN, BasicConstant.ROLE_GUDANG, BasicConstant.ROLE_DISTRIBUSI]), async (req, res) => {
     new inventoryModel().getItemList(req, (err, resp) => {
         return res.status(resp.error_schema.error_code).json(resp)
     })

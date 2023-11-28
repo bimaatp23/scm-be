@@ -214,8 +214,8 @@ export default class userModel {
                             callback(err2, errorResp(err2.message))
                         }
                         db2.query(
-                            "INSERT INTO users VALUES (NULL, ?, ?, 'retail', ?)",
-                            [body.name, body.username, body.password],
+                            "INSERT INTO users VALUES (NULL, ?, ?, ?, ?)",
+                            [body.name, body.username, BasicConstant.ROLE_RETAIL, body.password],
                             (err2) => {
                                 if (err2) {
                                     return db2.rollback(() => {
@@ -243,6 +243,70 @@ export default class userModel {
                             }
                         })
                         callback(null, baseResp(200, "Create retail success", {
+                            username: body.username,
+                            name: body.name,
+                            business_name: body.business_name,
+                            address: body.address,
+                            email: body.email,
+                            phone: body.phone
+                        }))
+                        db2.end()
+                    })
+                }
+                db.end()
+            }
+        )
+    }
+
+    createSupplier(req, callback) {
+        const body = req.body
+        const db = mysql.createConnection(dbConfig)
+        db.query(
+            "SELECT * FROM users WHERE username = ?",
+            [body.username],
+            (err, result) => {
+                if (err) {
+                    callback(err, errorResp(err.message))
+                } else if (result.length !== 0) {
+                    callback(null, baseResp(409, "Username already exists"))
+                } else if (body.password !== body.re_password) {
+                    callback(null, baseResp(400, "Passwords do not match"))
+                } else {
+                    const db2 = mysql.createConnection(dbConfig)
+                    db2.beginTransaction((err2) => {
+                        if (err2) {
+                            callback(err2, errorResp(err2.message))
+                        }
+                        db2.query(
+                            "INSERT INTO users VALUES (NULL, ?, ?, ?, ?)",
+                            [body.name, body.username, BasicConstant.ROLE_SUPPLIER, body.password],
+                            (err2) => {
+                                if (err2) {
+                                    return db2.rollback(() => {
+                                        callback(err2, errorResp(err2.message))
+                                    })
+                                }
+                            }
+                        )
+                        db2.query(
+                            "INSERT INTO suppliers VALUES (?, ?, ?, ?, ?)",
+                            [body.username, body.business_name, body.address, body.email, body.phone],
+                            (err2) => {
+                                if (err2) {
+                                    return db2.rollback(() => {
+                                        callback(err2, errorResp(err2.message))
+                                    })
+                                }
+                            }
+                        )
+                        db2.commit((err2) => {
+                            if (err2) {
+                                return db2.rollback(() => {
+                                    callback(err2, errorResp(err2.message))
+                                })
+                            }
+                        })
+                        callback(null, baseResp(200, "Create supplier success", {
                             username: body.username,
                             name: body.name,
                             business_name: body.business_name,

@@ -47,3 +47,9 @@ userRouter.post("/create-retail", multer().none(), checkRequest(["name", "userna
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
+
+userRouter.post("/create-supplier", multer().none(), checkRequest(["name", "username", "password", "re_password", "business_name", "address", "email", "phone"]), async (req, res) => {
+    new userModel().createSupplier(req, (err, resp) => {
+        return res.status(resp.error_schema.error_code).json(resp)
+    })
+})
