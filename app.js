@@ -9,7 +9,7 @@ import { userRouter } from "./src/routes/userRouter.js"
 
 dotenv.config()
 const app = express()
-const port = process.env.PORT
+const port = 5000
 
 app.use(cors())
 app.use("/user", userRouter)
