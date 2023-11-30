@@ -63,7 +63,7 @@ export default class procurementModel {
                     const db2 = mysql.createConnection(dbConfig)
                     let sqlQuery = "INSERT INTO procurement_items VALUES "
                     let sqlValues = JSON.parse(body.data).map((data) => {
-                        return `(NULL, ${body.procurement_id}, ${data.inventory_id}, '${data.item_name}', '${data.description}', '${data.unit}', '${data.quantity}', '${data.price}')`
+                        return `(NULL, ${body.procurement_id}, ${data.inventory_id}, "${data.item_name}", "${data.description}", "${data.unit}", "${data.quantity}", "${data.price}")`
                     })
                     db2.query(
                         sqlQuery + sqlValues.join(","),
@@ -163,7 +163,7 @@ export default class procurementModel {
                     const db2 = mysql.createConnection(dbConfig)
                     let sqlQuery = "INSERT INTO inventory_items VALUES "
                     let sqlValues = JSON.parse(body.data).map((data) => {
-                        return `(NULL, ${data.inventory_id}, '${data.quantity}', 'Procurement ${body.procurement_id}', '${BasicConstant.ITEM_MASUK}')`
+                        return `(NULL, ${data.inventory_id}, "${data.quantity}", "Procurement ${body.procurement_id}", "${BasicConstant.ITEM_MASUK}")`
                     })
                     db2.query(
                         sqlQuery + sqlValues.join(","),

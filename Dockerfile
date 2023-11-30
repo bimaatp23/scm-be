@@ -18,7 +18,7 @@ ENV DB_PWD=$DB_PWD
 ENV DB_NAME=$DB_NAME
 ENV SECRET_KEY=$SECRET_KEY
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY package*.json ./
 

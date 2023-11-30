@@ -52,10 +52,10 @@ export default class productionModel {
                     const db2 = mysql.createConnection(dbConfig)
                     let sqlQuery = "INSERT INTO production_items VALUES "
                     let sqlMaterial = JSON.parse(body.material).map((data) => {
-                        return `(NULL, ${body.production_id}, ${data.inventory_id}, '${data.item_name}', '${data.unit}', '${data.tipe}', '${data.quantity}')`
+                        return `(NULL, ${body.production_id}, ${data.inventory_id}, "${data.item_name}", "${data.unit}", "${data.tipe}", "${data.quantity}")`
                     })
                     let sqlProduct = JSON.parse(body.product).map((data) => {
-                        return `(NULL, ${body.production_id}, ${data.inventory_id}, '${data.item_name}', '${data.unit}', '${data.tipe}', '${data.quantity}')`
+                        return `(NULL, ${body.production_id}, ${data.inventory_id}, "${data.item_name}", "${data.unit}", "${data.tipe}", "${data.quantity}")`
                     })
                     db2.query(
                         sqlQuery + sqlMaterial.concat(sqlProduct).join(","),
@@ -121,7 +121,7 @@ export default class productionModel {
                     const db2 = mysql.createConnection(dbConfig)
                     let sqlQuery = "INSERT INTO inventory_items VALUES "
                     let sqlValues = JSON.parse(body.material).map((data) => {
-                        return `(NULL, ${data.inventory_id}, '${data.quantity}', 'Production ${body.production_id}', '${BasicConstant.ITEM_KELUAR}')`
+                        return `(NULL, ${data.inventory_id}, "${data.quantity}", "Production ${body.production_id}", "${BasicConstant.ITEM_KELUAR}")`
                     })
                     db2.query(
                         sqlQuery + sqlValues.join(","),
@@ -153,7 +153,7 @@ export default class productionModel {
                     const db2 = mysql.createConnection(dbConfig)
                     let sqlQuery = "INSERT INTO inventory_items VALUES "
                     let sqlValues = JSON.parse(body.product).map((data) => {
-                        return `(NULL, ${data.inventory_id}, '${data.quantity}', 'Production ${body.production_id}', '${BasicConstant.ITEM_MASUK}')`
+                        return `(NULL, ${data.inventory_id}, "${data.quantity}", "Production ${body.production_id}", "${BasicConstant.ITEM_MASUK}")`
                     })
                     db2.query(
                         sqlQuery + sqlValues.join(","),
