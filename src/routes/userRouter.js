@@ -53,3 +53,9 @@ userRouter.post("/create-supplier", multer().none(), checkRequest(["name", "user
         return res.status(resp.error_schema.error_code).json(resp)
     })
 })
+
+userRouter.get("/supplier-list", authenticateJwt([BasicConstant.ROLE_ADMIN, BasicConstant.ROLE_PENGADAAN]), async (req, res) => {
+    new userModel().supplierList(req, (err, resp) => {
+        return res.status(resp.error_schema.error_code).json(resp)
+    })
+})

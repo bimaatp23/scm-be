@@ -321,4 +321,19 @@ export default class userModel {
             }
         )
     }
+
+    supplierList(req, callback) {
+        const db = mysql.createConnection(dbConfig)
+        db.query(
+            "SELECT * FROM suppliers",
+            (err, result) => {
+                if (err) {
+                    callback(err, errorResp(err.message))
+                } else {
+                    callback(null, baseResp(200, "Get supplier list success", result))
+                }
+                db.end()
+            }
+        )
+    }
 }
